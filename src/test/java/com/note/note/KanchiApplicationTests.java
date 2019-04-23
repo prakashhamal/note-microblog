@@ -1,4 +1,4 @@
-package com.kanchi.kanchi;
+package com.note.note;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

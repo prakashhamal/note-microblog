@@ -1,8 +1,6 @@
-package com.kanchi.kanchi.service;
+package com.note.note.service;
 
-import com.kanchi.kanchi.model.Note;
-
-import java.util.List;
+import com.note.note.model.Note;
 
 public interface NoteService {
 

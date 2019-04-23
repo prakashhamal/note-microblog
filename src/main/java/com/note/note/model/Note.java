@@ -1,4 +1,4 @@
-package com.kanchi.kanchi.model;
+package com.note.note.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +13,8 @@ public class Note {
 
 
     private String title;
+
+    private String description;
 
 
     public Integer getId() {
@@ -29,5 +31,15 @@ public class Note {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 }

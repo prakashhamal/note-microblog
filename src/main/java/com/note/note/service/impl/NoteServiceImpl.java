@@ -1,21 +1,26 @@
-package com.kanchi.kanchi.service.impl;
+package com.note.note.service.impl;
 
-import com.kanchi.kanchi.model.Note;
-import com.kanchi.kanchi.repository.NoteRepository;
-import com.kanchi.kanchi.service.NoteService;
+import com.note.note.model.Note;
+import com.note.note.repository.NoteRepository;
+import com.note.note.service.NoteAnalyzer;
+import com.note.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class NoteServiceImpl implements NoteService {
 
     private NoteRepository noteRepository;
+    private NoteAnalyzer noteAnalyzer;
 
-    public NoteServiceImpl(NoteRepository noteRepository){
+    public NoteServiceImpl(NoteRepository noteRepository,NoteAnalyzer noteAnalyzer){
         this.noteRepository = noteRepository;
+        this.noteAnalyzer = noteAnalyzer;
     }
 
     public void analyzeNotes(){
@@ -30,7 +35,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     public void analyzeNote(Note note){
-        System.out.println(String.format("Note : %s",note.getTitle()));
+        noteAnalyzer.analyzeNote(note);
+        this.noteRepository.save(note);
 
     }
 

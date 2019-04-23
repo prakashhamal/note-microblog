@@ -1,15 +1,12 @@
-package com.kanchi.kanchi.controller;
+package com.note.note.controller;
 
 
-import com.kanchi.kanchi.model.Note;
-import com.kanchi.kanchi.repository.NoteRepository;
-import com.kanchi.kanchi.service.NoteService;
+import com.note.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 
 @Controller    // This means that this class is a Controller
 @RequestMapping(path="/note") // This means URL's start with /demo (after Application path)
@@ -23,6 +20,19 @@ public class NoteController {
     @GetMapping(path="/analyzeNotes")
     public @ResponseBody String getAllUsers() {
         noteService.analyzeNotes();
+        return "Successfully analyzed the notes";
+    }
+
+
+    @GetMapping(path="/hashtagnotes")
+    public @ResponseBody String getHashtagNotes() {
+        noteService.analyzeNotes();
+        return "Successfully analyzed the notes";
+    }
+
+    @GetMapping(path="/analyze/{noteId}")
+    public @ResponseBody String analyzeNote(@PathVariable("noteId") int noteId) {
+        noteService.analyzeNote(noteId);
         return "Successfully analyzed the notes";
     }
 }

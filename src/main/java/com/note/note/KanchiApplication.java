@@ -1,7 +1,5 @@
-package com.kanchi.kanchi;
+package com.note.note;
 
-import com.kanchi.kanchi.repository.NoteRepository;
-import com.kanchi.kanchi.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
