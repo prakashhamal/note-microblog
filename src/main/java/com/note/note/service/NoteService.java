@@ -8,5 +8,7 @@ public interface NoteService {
 
     void analyzeNote(int id);
 
+    void analyzeHashtagNotes(String hashtag);
+
     Note getNoteById(int id);
 }

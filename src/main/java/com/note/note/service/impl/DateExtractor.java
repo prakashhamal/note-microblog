@@ -4,35 +4,67 @@ import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 import com.note.note.model.Note;
 import com.note.note.service.ValueExtractor;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import net.rationalminds.LocalDateModel;
+
 @Service
-public class DateExtractor  extends ValueExtractor
+public class DateExtractor  implements ValueExtractor
 {
 
 	private static final Logger log = LoggerFactory.getLogger(DateExtractor.class);
-
+	private static final String DATE = "date";
 
 	public void extractValue(Note note)
 	{
+		if(!extractValueUsingNatty(note)){
+			log.error("Natty lib was not able to parse date of noteid :  "+note.getId());
+			try {
+				extractDateUsingRationalminds(note);
+			}
+			catch (ParseException e) {
+				log.error("Error while extracting date using rationalminds."+e.getMessage(),e);
+			}
+		}
+	}
+
+	private boolean extractValueUsingNatty(Note note){
+		boolean success = false;
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
 		Long epochMilli = parseKnownDateFormat(note.getTitle());
 		Date date = null;
 		if (epochMilli == null) {
-			Parser parser = new Parser();
+			com.joestelmach.natty.Parser parser = new com.joestelmach.natty.Parser();
 			List<DateGroup> groups = parser.parse(note.getTitle());
-			date = groups.get(0).getDates().get(0);
+			if(!groups.isEmpty() && !groups.get(0).getDates().isEmpty()) {
+				date = groups.get(0).getDates().get(0);
+				setValue(note, DATE, simpleDateFormat.format(date));
+				success = true;
+			}
 		}
-		setValue(note,"date",date);
+		return success;
+	}
+
+	private void extractDateUsingRationalminds(Note note) throws ParseException
+	{
+		SimpleDateFormat standardDF = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
+		net.rationalminds.Parser parser=new net.rationalminds.Parser();
+		List<LocalDateModel> dates=parser.parse(note.getTitle());
+		if(dates != null && !dates.isEmpty()){
+			LocalDateModel localDateModel = dates.get(0);
+			localDateModel.getDateTimeString();
+			SimpleDateFormat localDF = new SimpleDateFormat(localDateModel.getConDateFormat());
+			Date date = localDF.parse(localDateModel.getDateTimeString());
+			setValue(note,DATE,standardDF.format(date));
+		}
 	}
 
 

@@ -10,5 +10,9 @@ public interface HashtagService
 
 	List<Hashtag> getAllHashtags();
 
-	List<Hashtag> lookupHashtag(String lookupString);
+	List<String> lookupHashtag(String lookupString);
+
+	void buildHashtagsCache(int userId);
+
+	void destroyHashtagsCache(int userId);
 }

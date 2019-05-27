@@ -7,6 +7,7 @@ import com.note.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -34,6 +35,16 @@ public class NoteServiceImpl implements NoteService {
         this.analyzeNote(note);
     }
 
+    public NoteAnalyzer getNoteAnalyzer()
+    {
+        return noteAnalyzer;
+    }
+
+    public void setNoteAnalyzer(NoteAnalyzer noteAnalyzer)
+    {
+        this.noteAnalyzer = noteAnalyzer;
+    }
+
     public void analyzeNote(Note note){
         noteAnalyzer.analyzeNote(note);
         this.noteRepository.save(note);
@@ -43,5 +54,15 @@ public class NoteServiceImpl implements NoteService {
     public Note getNoteById(int id){
         Optional<Note> note = this.noteRepository.findById(id);
         return note.get();
+    }
+
+    @Override
+    public void analyzeHashtagNotes(String hashtag)
+    {
+        System.out.println("Yeha");
+        List<Note> notes = this.noteRepository.getHashtagNotes(hashtag.toUpperCase());
+        notes.forEach(note->{
+            this.analyzeNote(note);
+        });
     }
 }

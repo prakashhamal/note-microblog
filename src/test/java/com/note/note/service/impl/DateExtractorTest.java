@@ -18,7 +18,8 @@ public class DateExtractorTest
 	@Test
 	public void dateExtractor(){
 		Note note = new Note();
-		note.setTitle("Golf at Mulligans $16 02/07/2019 ");
+		note.setTitle("Had six inch philly cheese steak and fries from moochies for $9 on 03/02/2019 #expense #eatout");
 		this.dateExtractor.extractValue(note);
+		System.out.println(note.getDescription());
 	}
 }

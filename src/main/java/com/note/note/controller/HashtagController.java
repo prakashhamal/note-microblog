@@ -7,6 +7,7 @@ import com.note.note.service.NoteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,16 +31,29 @@ public class HashtagController
 
 
     @GetMapping(path="/recent")
-    public @ResponseBody String getRecentHashtags() {
-        this.hashtagService.getRecentHashtags();
-        return "Successfully analyzed the notes";
+    public ResponseEntity<List<Hashtag>> getRecentHashtags() {
+        List<Hashtag> hashtags =this.hashtagService.getRecentHashtags();
+        return ResponseEntity.ok().body(hashtags);
     }
 
 
-    @GetMapping(path="/lookup")
-    public @ResponseBody String lookup() {
-        this.hashtagService.lookupHashtag("");
-        return "Successfully analyzed the notes";
+    @GetMapping(path="/lookup/{input}")
+    public ResponseEntity<List<String>> lookup(@PathVariable("input") String input) {
+        List<String> hashtags = this.hashtagService.lookupHashtag(input);
+        return ResponseEntity.ok().body(hashtags);
     }
+
+    @GetMapping(path="/buildCache")
+    public ResponseEntity<String> buildCache() {
+       this.hashtagService.buildHashtagsCache(1);
+       
+       return ResponseEntity.ok("Success");
+    }
+
+    @GetMapping(path="/destroyCache")
+    public ResponseEntity<String> destroyCache() {
+        this.hashtagService.destroyHashtagsCache(1);
+        return ResponseEntity.ok("Success");
+    }                                                                                   p
 
 }

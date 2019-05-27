@@ -4,7 +4,6 @@ import com.note.note.model.Note;
 import com.note.note.service.NoteAnalyzer;
 import org.springframework.stereotype.Service;
 
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,12 +11,12 @@ import java.util.regex.Pattern;
 public class NoteAnalyzerImpl implements NoteAnalyzer
 {
 	public DateExtractor dateExtractor;
-	public CurrencyAmmountExtractor currencyAmmountExtractor;
+	public MonetaryAmountExtractor monetaryAmountExtractor;
 
 	public NoteAnalyzerImpl(DateExtractor dateExtractor,
-							CurrencyAmmountExtractor currencyAmmountExtractor){
+							MonetaryAmountExtractor currencyAmmountExtractor){
 		this.dateExtractor = dateExtractor;
-		this.currencyAmmountExtractor = currencyAmmountExtractor;
+		this.monetaryAmountExtractor = currencyAmmountExtractor;
 	}
 
 	@Override
@@ -32,7 +31,7 @@ public class NoteAnalyzerImpl implements NoteAnalyzer
 			switch(hashtag){
 				case "expense":
 					dateExtractor.extractValue(note);
-					currencyAmmountExtractor.extractValue(note);
+					monetaryAmountExtractor.extractValue(note);
 					break;
 				default:
 					System.out.println(String.format("Nothing to do with the hashtag %s", hashtag));

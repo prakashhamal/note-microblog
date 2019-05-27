@@ -24,9 +24,9 @@ public class NoteController {
     }
 
 
-    @GetMapping(path="/hashtagnotes")
-    public @ResponseBody String getHashtagNotes() {
-        noteService.analyzeNotes();
+    @GetMapping(path="/analyzehashtagnotes/{hashtag}")
+    public @ResponseBody String getHashtagNotes(@PathVariable("hashtag") String hashtag) {
+        noteService.analyzeHashtagNotes(hashtag);
         return "Successfully analyzed the notes";
     }
 
@@ -34,5 +34,9 @@ public class NoteController {
     public @ResponseBody String analyzeNote(@PathVariable("noteId") int noteId) {
         noteService.analyzeNote(noteId);
         return "Successfully analyzed the notes";
+    }
+
+    public @ResponseBody String saveNote(){
+        
     }
 }
