@@ -54,6 +54,6 @@ public class HashtagController
     public ResponseEntity<String> destroyCache() {
         this.hashtagService.destroyHashtagsCache(1);
         return ResponseEntity.ok("Success");
-    }                                                                                   p
+    }
 
 }
