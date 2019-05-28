@@ -11,4 +11,10 @@ public interface NoteService {
     void analyzeHashtagNotes(String hashtag);
 
     Note getNoteById(int id);
+
+    Note saveNote(Note note);
+
+    void deleteNote(int id);
+
+
 }

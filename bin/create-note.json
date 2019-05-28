@@ -1,0 +1,35 @@
+[
+  {
+    "enabled": false,
+    "id": "add-note",
+    "url": "http://localhost:5001/note",
+    "method": "POST",
+    "headers": {
+      "content-type": "application/json"
+    },
+    "parameter":{
+      "title":"testing #testing"
+    },
+    "validation": {
+      "status_code": 200
+    }
+  },
+  {
+    "enabled": true,
+    "id": "update-note",
+    "url": "http://localhost:5001/note",
+    "method": "POST",
+    "headers": {
+      "content-type": "application/json"
+    },
+    "parameter":{
+      "id":735,
+      "title":"testing testing #testing"
+    },
+    "validation": {
+      "status_code": 200
+    }
+  }
+  
+
+]
