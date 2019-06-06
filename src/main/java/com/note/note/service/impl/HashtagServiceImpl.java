@@ -2,7 +2,6 @@ package com.note.note.service.impl;
 
 import com.note.note.model.Hashtag;
 import com.note.note.repository.HashtagRepository;
-import com.note.note.repository.NoteRepository;
 import com.note.note.service.HashtagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -45,6 +43,7 @@ public class HashtagServiceImpl implements HashtagService
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Hashtag> getAllHashtags()
 	{
@@ -53,6 +52,7 @@ public class HashtagServiceImpl implements HashtagService
 		return hashtags;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> lookupHashtag(String lookupString)
 	{
@@ -71,6 +71,7 @@ public class HashtagServiceImpl implements HashtagService
 		return lookupResult;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void buildHashtagsCache(int userId)
 	{
@@ -81,6 +82,7 @@ public class HashtagServiceImpl implements HashtagService
 		this.hashOperations.put(KEY,userId,hashtags);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void destroyHashtagsCache(int userId)
 	{

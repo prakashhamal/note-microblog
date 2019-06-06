@@ -79,6 +79,12 @@ public class NoteServiceImpl implements NoteService {
     {
         this.noteRepository.deleteById(id);
     }
+
+    @Override
+    public List<Note> recentNotes(int limit, int offset)
+    {
+        return this.noteRepository.getRecentNotes(limit,offset);
+    }
 }
 
 

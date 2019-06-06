@@ -3,17 +3,23 @@ package com.note.note.controller;
 
 import com.note.note.model.Note;
 import com.note.note.service.NoteService;
+import com.note.note.service.impl.HashtagServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.List;
 
 @Controller    // This means that this class is a Controller
 @RequestMapping(path = "/note") // This means URL's start with /demo (after Application path)
 public class NoteController
 {
+	private static final Logger log = LoggerFactory.getLogger(NoteController.class);
 
 	private NoteService noteService;
 
@@ -47,7 +53,7 @@ public class NoteController
 		return "Successfully analyzed the notes";
 	}
 
-	@PostMapping
+	@PostMapping(path = "/save")
 	public @ResponseBody
 	ResponseEntity<Note> saveNote(@RequestBody Note note)
 	{
@@ -69,5 +75,13 @@ public class NoteController
 	{
 		noteService.deleteNote(noteId);
 		return ResponseEntity.ok("Successfully deleted");
+	}
+
+	@GetMapping(path = "/recentnotes")
+	public @ResponseBody
+	ResponseEntity<List<Note>> recentNotes(@RequestParam("limit") int limit,@RequestParam("offset") int offset)
+	{
+		List<Note> notes = noteService.recentNotes(limit, offset);
+		return ResponseEntity.ok().body(notes);
 	}
 }
