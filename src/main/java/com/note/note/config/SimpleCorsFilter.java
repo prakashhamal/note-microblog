@@ -20,7 +20,7 @@ public class SimpleCorsFilter implements Filter
 {
 	private static final Logger log = LoggerFactory.getLogger(SimpleCorsFilter.class);
 
-	private final Set<String> allowedOrigins = new HashSet<>(Arrays.asList("http://localhost:4230"));
+	private final Set<String> allowedOrigins = new HashSet<>(Arrays.asList("http://localhost:4230","http://www.aageno.com"));
 
 
 	public SimpleCorsFilter() {

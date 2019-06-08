@@ -12,7 +12,7 @@ public class NoteServiceImplTest
 	private NoteAnalyzer noteAnalyzer;
 
 	public NoteServiceImplTest(){
-		this.noteService = new NoteServiceImpl(null,null);
+		this.noteService = new NoteServiceImpl(null,null,null);
 
 	}
 

@@ -1,6 +1,8 @@
 package com.note.note.controller;
 
 
+import com.note.note.dto.NoteSearchDto;
+import com.note.note.dto.SearchResult;
 import com.note.note.model.Note;
 import com.note.note.service.NoteService;
 import com.note.note.service.impl.HashtagServiceImpl;
@@ -83,5 +85,21 @@ public class NoteController
 	{
 		List<Note> notes = noteService.recentNotes(limit, offset);
 		return ResponseEntity.ok().body(notes);
+	}
+
+	@GetMapping(path = "/hashtagnotes/{hashtag}")
+	public @ResponseBody
+	ResponseEntity<List<Note>> hashtagNotes(@PathVariable("hashtag") String hashtag)
+	{
+		List<Note> notes = noteService.hashtagNotes(hashtag);
+		return ResponseEntity.ok().body(notes);
+	}
+
+	@PostMapping(path = "/search")
+	public @ResponseBody
+	ResponseEntity<SearchResult<Note>> searchNote(@RequestBody NoteSearchDto searchDto)
+	{
+		SearchResult<Note> searchResult = noteService.searchNote(searchDto);
+		return ResponseEntity.ok().body(searchResult);
 	}
 }

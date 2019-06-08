@@ -1,9 +1,15 @@
 package com.note.note.service.impl;
 
+import com.note.note.dto.NoteSearchDto;
+import com.note.note.dto.SearchResult;
+import com.note.note.exceptions.ServiceException;
 import com.note.note.model.Note;
 import com.note.note.repository.NoteRepository;
+import com.note.note.service.ElasticSearchService;
 import com.note.note.service.NoteAnalyzer;
 import com.note.note.service.NoteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +23,16 @@ import java.util.regex.Pattern;
 @Service
 public class NoteServiceImpl implements NoteService {
 
+
+    private static final Logger log = LoggerFactory.getLogger(NoteServiceImpl.class);
     private NoteRepository noteRepository;
     private NoteAnalyzer noteAnalyzer;
+    private ElasticSearchService elasticSearchService;
 
-    public NoteServiceImpl(NoteRepository noteRepository,NoteAnalyzer noteAnalyzer){
+    public NoteServiceImpl(NoteRepository noteRepository,NoteAnalyzer noteAnalyzer, ElasticSearchService elasticSearchService){
         this.noteRepository = noteRepository;
         this.noteAnalyzer = noteAnalyzer;
+        this.elasticSearchService = elasticSearchService;
     }
 
     public void analyzeNotes(){
@@ -67,6 +77,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public List<Note> hashtagNotes(String hashtag)
+    {
+        return this.noteRepository.getHashtagNotes(hashtag.toUpperCase());
+    }
+
+    @Override
     public Note saveNote(Note note)
     {
         note.setDateCreated(new Date());
@@ -84,6 +100,20 @@ public class NoteServiceImpl implements NoteService {
     public List<Note> recentNotes(int limit, int offset)
     {
         return this.noteRepository.getRecentNotes(limit,offset);
+    }
+
+    @Override
+    public SearchResult<Note> searchNote(NoteSearchDto searchDto)
+    {
+        String search = String.format("{\"from\" : %d, \"size\" : %d,\"query\": {\"match\": {\"title\": \"%s\"}}}",searchDto.getOffset(),searchDto.getLimit(), searchDto.getSearchString());
+        try {
+            this.elasticSearchService.setIndex("brahman");
+            return this.elasticSearchService.search("note",search,Note.class);
+        }
+        catch (ServiceException e) {
+            log.error(e.getMessage(),e);
+        }
+        return null;
     }
 }
 
