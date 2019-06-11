@@ -48,7 +48,7 @@ public class HashtagServiceImpl implements HashtagService
 	public List<Hashtag> getAllHashtags()
 	{
 		List<Hashtag> hashtags = new ArrayList<>();
-		this.hashtagRepository.findAll().forEach(item->{hashtags.add(item);});
+		this.hashtagRepository.allHashtags().forEach(item->{hashtags.add(item);});
 		return hashtags;
 	}
 

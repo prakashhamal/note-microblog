@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class ElasticSearchServiceImpl implements ElasticSearchService
 {
-
+	public static final String BRAHMAN_INDEX = "brahman";
 	private static final Logger log = LoggerFactory.getLogger(ElasticSearchServiceImpl.class);
 	@Value("${elasticsearch.host}")
 	private String host;

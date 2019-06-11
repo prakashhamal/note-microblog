@@ -2,6 +2,7 @@ package com.note.note.controller;
 
 
 import com.note.note.dto.NoteSearchDto;
+import com.note.note.dto.RestResponse;
 import com.note.note.dto.SearchResult;
 import com.note.note.model.Note;
 import com.note.note.service.NoteService;
@@ -73,10 +74,13 @@ public class NoteController
 
 	@DeleteMapping(path = "/{noteId}")
 	public @ResponseBody
-	ResponseEntity<String> deleteNote(@PathVariable("noteId") int noteId)
+	ResponseEntity<RestResponse> deleteNote(@PathVariable("noteId") int noteId)
 	{
+
 		noteService.deleteNote(noteId);
-		return ResponseEntity.ok("Successfully deleted");
+		RestResponse restResponse = new RestResponse();
+		restResponse.setResponseMessage("Successfully deleted the note.");
+		return ResponseEntity.ok().body(restResponse);
 	}
 
 	@GetMapping(path = "/recentnotes")
@@ -94,7 +98,7 @@ public class NoteController
 		List<Note> notes = noteService.hashtagNotes(hashtag);
 		return ResponseEntity.ok().body(notes);
 	}
-
+	
 	@PostMapping(path = "/search")
 	public @ResponseBody
 	ResponseEntity<SearchResult<Note>> searchNote(@RequestBody NoteSearchDto searchDto)

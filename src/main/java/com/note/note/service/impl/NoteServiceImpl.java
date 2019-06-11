@@ -1,5 +1,6 @@
 package com.note.note.service.impl;
 
+import com.google.gson.Gson;
 import com.note.note.dto.NoteSearchDto;
 import com.note.note.dto.SearchResult;
 import com.note.note.exceptions.ServiceException;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -85,8 +88,25 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note saveNote(Note note)
     {
-        note.setDateCreated(new Date());
+        if(note.getId() == null) {
+            note.setDateCreated(new Date());
+        }
+        note.setDateUpdated(new Date());
         Note savedNote = this.noteRepository.save(note);
+        this.elasticSearchService.setIndex(ElasticSearchServiceImpl.BRAHMAN_INDEX);
+        //TODO save the hashtags and link to the hastags
+
+        Gson gson = new Gson();
+        String noteJson = gson.toJson(note);
+        try {
+            this.elasticSearchService.index("note",Integer.toString(note.getId()),noteJson);
+        }
+        catch (IOException e) {
+            log.error(e.getMessage(),e);
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         return savedNote;
     }
 
@@ -107,7 +127,7 @@ public class NoteServiceImpl implements NoteService {
     {
         String search = String.format("{\"from\" : %d, \"size\" : %d,\"query\": {\"match\": {\"title\": \"%s\"}}}",searchDto.getOffset(),searchDto.getLimit(), searchDto.getSearchString());
         try {
-            this.elasticSearchService.setIndex("brahman");
+            this.elasticSearchService.setIndex(ElasticSearchServiceImpl.BRAHMAN_INDEX);
             return this.elasticSearchService.search("note",search,Note.class);
         }
         catch (ServiceException e) {
