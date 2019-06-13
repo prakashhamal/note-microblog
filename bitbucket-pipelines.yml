@@ -9,5 +9,5 @@ pipelines:
     - step:
         script:
           - mvn package -DskipTests
-          - scp target/note-1.0.jar root@http://47.254.91.56:~/jars
-          - ssh -t root@http://47.254.91.56 -i ~/.ssh/ssh_key "cd ~/site ; bash"
+          - scp target/note-1.0.jar root@47.254.91.56:~/jars
+          - ssh -t root@47.254.91.56 -i ~/.ssh/ssh_key "cd ~/site ; bash"
