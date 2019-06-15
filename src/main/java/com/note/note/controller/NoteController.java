@@ -76,7 +76,6 @@ public class NoteController
 	public @ResponseBody
 	ResponseEntity<RestResponse> deleteNote(@PathVariable("noteId") int noteId)
 	{
-
 		noteService.deleteNote(noteId);
 		RestResponse restResponse = new RestResponse();
 		restResponse.setResponseMessage("Successfully deleted the note.");

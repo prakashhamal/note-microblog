@@ -23,6 +23,8 @@ public class Note {
 
     private Date dateProcessed;
 
+    private Boolean archived;
+
     public Integer getId() {
         return id;
     }
@@ -77,5 +79,15 @@ public class Note {
     public void setDateProcessed(Date dateProcessed)
     {
         this.dateProcessed = dateProcessed;
+    }
+
+    public Boolean getArchived()
+    {
+        return archived;
+    }
+
+    public void setArchived(Boolean archived)
+    {
+        this.archived = archived;
     }
 }

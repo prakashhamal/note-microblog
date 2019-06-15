@@ -113,7 +113,14 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void deleteNote(int id)
     {
-        this.noteRepository.deleteById(id);
+        try {
+            this.elasticSearchService.setIndex(ElasticSearchServiceImpl.BRAHMAN_INDEX);
+            this.elasticSearchService.remove("note",Integer.toString(id));
+            this.noteRepository.deleteById(id);
+        }
+        catch (IOException | URISyntaxException e) {
+            log.error(e.getMessage(),e);
+        }
     }
 
     @Override
