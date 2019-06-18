@@ -2,6 +2,7 @@ package com.note.note.service.impl;
 
 import com.note.note.model.Note;
 import com.note.note.service.ValueExtractor;
+import com.note.note.utils.AnalyzerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 @Service
-public class MonetaryAmountExtractor implements ValueExtractor
+public class MonetaryAmountExtractor implements ValueExtractor,AnalyzerUtils
 {
 	private static final Logger log = LoggerFactory.getLogger(MonetaryAmountExtractor.class);
 	public void extractValue(Note note){

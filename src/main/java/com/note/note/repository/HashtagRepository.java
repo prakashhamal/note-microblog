@@ -15,4 +15,6 @@ public interface HashtagRepository extends CrudRepository<Hashtag, Integer> {
 
 	@Query("Select h from Hashtag h order by hashtag asc")
 	List<Hashtag> allHashtags();
+
+	Hashtag findFirstByHashtagEquals(String hashtag);
 }

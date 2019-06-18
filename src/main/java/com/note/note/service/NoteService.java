@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface NoteService {
 
-    void analyzeNotes();
-
     void analyzeNote(int id);
 
     void analyzeHashtagNotes(String hashtag);
@@ -25,6 +23,8 @@ public interface NoteService {
     List<Note> recentNotes(int limit, int offset);
 
     SearchResult<Note> searchNote(NoteSearchDto searchDto);
+
+    void processUnprocessedNotes();
 
 
 }

@@ -19,4 +19,7 @@ public interface NoteRepository extends CrudRepository<Note, Integer> {
 	@Query(value = "select n.* from note n where n.archived = false  order by date_updated desc limit ?1 offset ?2",nativeQuery=true)
 	List<Note> getRecentNotes(int limit,int offset);
 
-}
+	@Query("select n from Note n where n.dateProcessed is null or n.dateUpdated > n.dateProcessed")
+	List<Note> getUnprocessedNotesSinceLastSave();
+
+}                                                               

@@ -90,4 +90,18 @@ public class Note {
     {
         this.archived = archived;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Note{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dateCreated=" + dateCreated +
+                ", dateUpdated=" + dateUpdated +
+                ", dateProcessed=" + dateProcessed +
+                ", archived=" + archived +
+                '}';
+    }
 }

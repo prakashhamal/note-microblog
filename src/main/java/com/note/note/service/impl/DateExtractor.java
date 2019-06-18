@@ -4,6 +4,7 @@ import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 import com.note.note.model.Note;
 import com.note.note.service.ValueExtractor;
+import com.note.note.utils.AnalyzerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.*;
 import net.rationalminds.LocalDateModel;
 
 @Service
-public class DateExtractor  implements ValueExtractor
+public class DateExtractor  implements ValueExtractor, AnalyzerUtils
 {
 
 	private static final Logger log = LoggerFactory.getLogger(DateExtractor.class);

@@ -12,6 +12,7 @@ import com.note.note.service.NoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -38,12 +39,7 @@ public class NoteServiceImpl implements NoteService {
         this.elasticSearchService = elasticSearchService;
     }
 
-    public void analyzeNotes(){
-       this.noteRepository.findAll().forEach(note -> {
-           this.analyzeNote(note);
-       });
-    }
-
+    
     public void analyzeNote(int id){
         Note note = this.getNoteById(id);
         this.analyzeNote(note);
@@ -60,6 +56,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     public void analyzeNote(Note note){
+        log.info("Processing note {} : {}",note.getId(),note.getTitle() );
         noteAnalyzer.analyzeNote(note);
         this.noteRepository.save(note);
 
@@ -93,6 +90,8 @@ public class NoteServiceImpl implements NoteService {
         }
         note.setDateUpdated(new Date());
         Note savedNote = this.noteRepository.save(note);
+
+        /*
         this.elasticSearchService.setIndex(ElasticSearchServiceImpl.BRAHMAN_INDEX);
         //TODO save the hashtags and link to the hastags
 
@@ -107,6 +106,8 @@ public class NoteServiceImpl implements NoteService {
         catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        */
+
         return savedNote;
     }
 
@@ -142,6 +143,23 @@ public class NoteServiceImpl implements NoteService {
         }
         return null;
     }
+
+    @Override
+    public void processUnprocessedNotes()
+    {
+        List<Note> unprocessedNotes = this.noteRepository.getUnprocessedNotesSinceLastSave();
+        unprocessedNotes.forEach(note->{
+            try {
+                this.analyzeNote(note);
+            }catch(Exception e){
+                log.error("Error processing note {}",note.getId(),e);
+
+            }
+
+        });
+    }
+
+
 }
 
 

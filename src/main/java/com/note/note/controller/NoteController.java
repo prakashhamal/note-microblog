@@ -31,11 +31,11 @@ public class NoteController
 		this.noteService = noteService;
 	}
 
-	@GetMapping(path = "/analyzeNotes")
+	@GetMapping(path = "/processNotes")
 	public @ResponseBody
 	String getAllUsers()
 	{
-		noteService.analyzeNotes();
+		noteService.processUnprocessedNotes();
 		return "Successfully analyzed the notes";
 	}
 
@@ -52,6 +52,7 @@ public class NoteController
 	public @ResponseBody
 	String analyzeNote(@PathVariable("noteId") int noteId)
 	{
+		log.info("Analyzing note {}",noteId);
 		noteService.analyzeNote(noteId);
 		return "Successfully analyzed the notes";
 	}
@@ -60,6 +61,7 @@ public class NoteController
 	public @ResponseBody
 	ResponseEntity<Note> saveNote(@RequestBody Note note)
 	{
+		log.debug("Saving note ",note.toString());
 		Note savedNote = noteService.saveNote(note);
 		return ResponseEntity.ok().body(savedNote);
 	}
@@ -104,5 +106,13 @@ public class NoteController
 	{
 		SearchResult<Note> searchResult = noteService.searchNote(searchDto);
 		return ResponseEntity.ok().body(searchResult);
+	}
+
+	@GetMapping(path = "/blog")
+	public @ResponseBody
+	ResponseEntity<List<Note>> hashtagNotes()
+	{
+		List<Note> notes = noteService.hashtagNotes("blog");
+		return ResponseEntity.ok().body(notes);
 	}
 }
