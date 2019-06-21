@@ -50,6 +50,9 @@ public class NoteAnalyzerImpl implements NoteAnalyzer, AnalyzerUtils
 					dateExtractor.extractValue(note);
 					monetaryAmountExtractor.extractValue(note);
 					break;
+				case "reminder":
+					dateExtractor.extractValue(note);
+				break;
 				default:
 					log.info(String.format("Nothing to do with the hashtag %s", hashtag));
 					break;

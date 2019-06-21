@@ -91,7 +91,7 @@ public class NoteServiceImpl implements NoteService {
         note.setDateUpdated(new Date());
         Note savedNote = this.noteRepository.save(note);
 
-        /*
+
         this.elasticSearchService.setIndex(ElasticSearchServiceImpl.BRAHMAN_INDEX);
         //TODO save the hashtags and link to the hastags
 
@@ -106,7 +106,7 @@ public class NoteServiceImpl implements NoteService {
         catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        */
+        
 
         return savedNote;
     }
@@ -114,10 +114,10 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void deleteNote(int id)
     {
+        this.noteRepository.deleteById(id);
         try {
             this.elasticSearchService.setIndex(ElasticSearchServiceImpl.BRAHMAN_INDEX);
             this.elasticSearchService.remove("note",Integer.toString(id));
-            this.noteRepository.deleteById(id);
         }
         catch (IOException | URISyntaxException e) {
             log.error(e.getMessage(),e);

@@ -32,6 +32,8 @@ public class HashtagProcessorServiceImpl implements HashtagProcessorService
 		
 		JSONObject detailJson = new JSONObject(note.getDescription());
 		JSONArray hashtags = detailJson.getJSONArray("hashtags");
+
+		hashtagNoteRepository.deleteNoteHashtagLinks(note.getId());
 		for(int i=0;i<hashtags.length();i++){
 			String hashtag = hashtags.getString(i);
 			Hashtag hashtagDB = hashtagRepository.findFirstByHashtagEquals(hashtag);

@@ -17,4 +17,5 @@ public interface HashtagRepository extends CrudRepository<Hashtag, Integer> {
 	List<Hashtag> allHashtags();
 
 	Hashtag findFirstByHashtagEquals(String hashtag);
+
 }
