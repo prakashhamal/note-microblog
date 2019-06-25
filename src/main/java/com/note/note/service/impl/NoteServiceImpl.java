@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import com.note.note.dto.NoteSearchDto;
 import com.note.note.dto.SearchResult;
 import com.note.note.exceptions.ServiceException;
+import com.note.note.model.Attachment;
 import com.note.note.model.Note;
+import com.note.note.repository.AttachmentRepository;
 import com.note.note.repository.NoteRepository;
+import com.note.note.service.AttachmentService;
 import com.note.note.service.ElasticSearchService;
 import com.note.note.service.NoteAnalyzer;
 import com.note.note.service.NoteService;
@@ -32,11 +35,15 @@ public class NoteServiceImpl implements NoteService {
     private NoteRepository noteRepository;
     private NoteAnalyzer noteAnalyzer;
     private ElasticSearchService elasticSearchService;
+    private AttachmentRepository attachmentRepository;
+    private AttachmentService attachmentService;
 
-    public NoteServiceImpl(NoteRepository noteRepository,NoteAnalyzer noteAnalyzer, ElasticSearchService elasticSearchService){
+    public NoteServiceImpl(NoteRepository noteRepository,NoteAnalyzer noteAnalyzer, ElasticSearchService elasticSearchService, AttachmentRepository attachmentRepository,AttachmentService attachmentService){
         this.noteRepository = noteRepository;
         this.noteAnalyzer = noteAnalyzer;
         this.elasticSearchService = elasticSearchService;
+        this.attachmentRepository = attachmentRepository;
+        this.attachmentService = attachmentService;
     }
 
     
@@ -79,8 +86,12 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> hashtagNotes(String hashtag)
     {
-        return this.noteRepository.getHashtagNotes(hashtag.toUpperCase());
-    }
+        List<Note> notes = this.noteRepository.getHashtagNotes(hashtag.toUpperCase());
+        notes.forEach(note->{
+            this.loadNoteAttachments(note);
+        });
+        return notes;
+    }                                 
 
     @Override
     public Note saveNote(Note note)
@@ -107,6 +118,8 @@ public class NoteServiceImpl implements NoteService {
             e.printStackTrace();
         }
         
+        this.loadNoteAttachments(savedNote);
+        
 
         return savedNote;
     }
@@ -122,12 +135,20 @@ public class NoteServiceImpl implements NoteService {
         catch (IOException | URISyntaxException e) {
             log.error(e.getMessage(),e);
         }
+        List<Attachment> noteAttachments = this.attachmentRepository.getAllByNoteId(id);
+        noteAttachments.forEach(attachment -> {
+            this.attachmentService.deleteNoteAttachment(attachment,id);
+        });
     }
 
     @Override
     public List<Note> recentNotes(int limit, int offset)
     {
-        return this.noteRepository.getRecentNotes(limit,offset);
+        List<Note> recentNotes = this.noteRepository.getRecentNotes(limit,offset);
+        recentNotes.forEach(note->{
+            this.loadNoteAttachments(note);
+        });
+        return recentNotes;
     }
 
     @Override
@@ -155,8 +176,15 @@ public class NoteServiceImpl implements NoteService {
                 log.error("Error processing note {}",note.getId(),e);
 
             }
-
         });
+    }
+
+    private void loadNoteAttachments(Note note){
+        List<Attachment> attachments = this.attachmentRepository.getAllByNoteId(note.getId());
+        attachments.forEach(attachment -> {
+            this.attachmentService.getSharableLink(attachment);
+        });
+        note.setAttachmentList(attachments);
     }
 
 

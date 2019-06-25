@@ -1,23 +1,25 @@
 package com.note.note.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.net.URL;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class Attachment
 {
 	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
 	private Integer noteId;
 
 	private String fileName;
 
-	private Timestamp creationDate;
+	private Date creationDate;
+
+	@Transient
+	private String sharableUrl;
 
 	public Integer getId()
 	{
@@ -49,13 +51,23 @@ public class Attachment
 		this.fileName = fileName;
 	}
 
-	public Timestamp getCreationDate()
+	public Date getCreationDate()
 	{
 		return creationDate;
 	}
 
-	public void setCreationDate(Timestamp creationDate)
+	public void setCreationDate(Date creationDate)
 	{
 		this.creationDate = creationDate;
+	}
+
+	public String getSharableUrl()
+	{
+		return sharableUrl;
+	}
+
+	public void setSharableUrl(String sharableUrl)
+	{
+		this.sharableUrl = sharableUrl;
 	}
 }

@@ -1,10 +1,8 @@
 package com.note.note.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Note {
@@ -24,6 +22,9 @@ public class Note {
     private Date dateProcessed;
 
     private Boolean archived;
+
+    @Transient
+    private List<Attachment> attachmentList;
 
     public Integer getId() {
         return id;
@@ -89,6 +90,16 @@ public class Note {
     public void setArchived(Boolean archived)
     {
         this.archived = archived;
+    }
+
+    public List<Attachment> getAttachmentList()
+    {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<Attachment> attachmentList)
+    {
+        this.attachmentList = attachmentList;
     }
 
     @Override
