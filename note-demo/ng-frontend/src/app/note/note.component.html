@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="row">
+  <div class="topnav">
+
+    <div style="float:right;padding:5px 25px 5px 5px; " class="cursor-pointer" *ngIf="false">
+      <div [matMenuTriggerFor]="accountMenu">
+        <mat-icon style="display: block;">person</mat-icon>
+      </div>
+      <mat-menu #accountMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>star</mat-icon>
+          <span>Account Settings</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+    <div style="float: right;padding: 5px;" class="cursor-pointer" *ngIf="false">
+      <mat-icon style="display: block;">notifications</mat-icon>
+    </div>
+
+    <div style="float: right;padding:5px;" class="cursor-pointer" (click)="add()">
+      <mat-icon style="display: block;">add</mat-icon>
+    </div>
+    <div style="float:left;">
+      <a color="active" class="cursor-pointer" (click)="sidenav.toggle()">
+        <mat-icon style="display: block;">reorder</mat-icon>
+      </a>
+    </div>
+    <div style="float: left;">
+      <input fxFlex="100" type="text" [(ngModel)]="searchString" (keydown.enter)="search()" placeholder="Search..."/>
+    </div>
+  </div>
+
+  <mat-drawer-container class="container" style="height: 100%;">
+    <div>
+      <mat-progress-bar mode="indeterminate" *ngIf="inProgress"></mat-progress-bar>
+    </div>
+    <div style="padding:10px;">
+      <mat-chip-list>
+        <mat-chip *ngFor="let keyword of keywords" [removable]="true"
+                  (removed)="removeKeyword(keyword)">
+          {{keyword}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <mat-drawer #sidenav id="sidenav" mode="side">
+      <div>
+        <mat-icon style="display: block;">settings</mat-icon>
+      </div>
+      <div class="sidenav-menu " (click)="getHashtagNotes(hashtag)" style="vertical-align: middle"
+           *ngFor="let hashtag of hashtags">
+        #{{hashtag}}
+      </div>
+    </mat-drawer>
+    <div class="sidenav-content" (click)="sidenav.close()">
+
+      <div class="note-add-row" id="quickAdd" *ngIf="quickAdd">
+        <textarea [(ngModel)]="note.title" (keydown.enter)="saveQuickAddNote()"></textarea>
+      </div>
+      <div class="note-add-row" id="editNote" *ngIf="!quickAdd">
+        <ckeditor [(ngModel)]="model.editorData" [editor]="Editor">></ckeditor>
+        <!--
+        <textarea rows="3" [(ngModel)]="note.title" (keyup)="autoGrowTextZone($event)"></textarea>
+        -->
+        <div style="padding-top:5px;">
+          <table>
+            <tr>
+              <td>
+                <button type="submit" mat-raised-button (click)="saveNote()" color="primary">Save</button>
+              </td>
+              <td>
+                <button type="button" mat-raised-button (click)="cancel()">Cancel</button>
+              </td>
+              <td>
+                <input type="file" name="imageUpload" id="imageUpload" (change)=fileEvent($event)
+                       style="display: none;"/>
+                <label for="imageUpload" class="button-style cursor-pointer">
+                  <mat-icon style="display: block;">attach_file</mat-icon>
+                </label>
+              </td>
+              <td>
+                <mat-chip-list>
+                  <mat-chip *ngFor="let file of files; index as i" [removable]="true"
+                            (removed)="removeFile(i)">
+                    {{file.name}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="note-row" *ngFor="let note of notes; index as i">
+        <div style="float: left">
+          <div [innerHTML]="note.title"></div>
+
+          <div class="note-extra-info">
+            <div *ngIf="note.descJSON && note.descJSON.hashtags" style="margin-bottom: 25px;">
+              <span *ngFor="let tag of note.descJSON.hashtags"> #{{tag}}</span>
+            </div>
+            <div>
+              <div *ngFor="let attachment of note.attachmentList">
+                <a [href]="attachment.sharableUrl" target="_blank">{{attachment.fileName}}</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div style="float:right;" class="cursor-pointer" [matMenuTriggerFor]="menu">
+          <span><mat-icon style="display: block;">more_horiz</mat-icon></span>
+        </div>
+        <mat-menu #menu="matMenu">
+          <button (click)="selectNote(note,i)" mat-menu-item>
+            <mat-icon>create</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button (click)="archiveNote(note,i)" mat-menu-item>
+            <mat-icon>archive</mat-icon>
+            <span>Archive</span>
+          </button>
+          <button (click)="deleteNote(note,i)" mat-menu-item>
+            <mat-icon>delete</mat-icon>
+            <span>Delete </span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>Share</mat-icon>
+            <span>Share </span>
+          </button>
+        </mat-menu>
+        <div style="clear: both"></div>
+      </div>
+      <div style="margin-bottom: 10px;padding-right: 30px;" *ngIf="notes.length > 0">
+        <a style="float:right;text-decoration: underline" class="cursor-pointer" (click)="loadMoreNotes()">Load More</a>
+        <div style="clear: both"></div>
+      </div>
+    </div>
+  </mat-drawer-container>
+</div>
+
+</body>
+</html>

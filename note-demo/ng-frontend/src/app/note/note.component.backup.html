@@ -1,0 +1,95 @@
+<html>
+<body>
+<div style="height:100%;">
+  <div class="topnav">
+    <a class="active" (click)="sidenav.toggle()">
+      <mat-icon style="display: block;">reorder</mat-icon>
+    </a>
+    <button style="float:right;" color="primary" (click)="add()">
+      <mat-icon style="display: block;">add</mat-icon>
+    </button>
+    <input type="text" [(ngModel)]="searchString" (keydown.enter)="search()" placeholder="Search..">
+  </div>
+  <mat-drawer-container class="container">
+
+    <mat-drawer #sidenav mode="side" style="width:200px;">
+      <div id="sidenav">
+        <a style="margin-top: 1px;" href="/dashboard">
+          <mat-icon style="display: block;">home</mat-icon>
+        </a>
+        <ng-container *ngFor="let hashtag of hashtags">
+          <div><a href="javascript:void(0)" (click)="searchWithString('#'+hashtag)">#{{hashtag}}</a></div>
+        </ng-container>
+      </div>
+    </mat-drawer>
+
+    <div class="sidenav-content">
+      <div>
+        <mat-card *ngIf="displayForm">
+          <form (ngSubmit)="onSubmit()" #noteForm="ngForm">
+            <div class="form-group">
+              <mat-form-field>
+              <textarea rows="25" matInput placeholder="Note" class="form-control" id="title"
+                        required
+                        [(ngModel)]="note.title" name="title">  </textarea>
+              </mat-form-field>
+            </div>
+            <div>
+              <button type="submit" mat-raised-button color="primary" [disabled]="!noteForm.form.valid">Save</button>
+              &nbsp;
+              <button type="button" mat-raised-button (click)="cancel()">Cancel</button>
+            </div>
+          </form>
+        </mat-card>
+      </div>
+
+
+      <div>
+        <div class="note-row" *ngFor="let note of notes">
+          <div style="float:left;">
+            <p *ngIf="!note.readmore" id="bidDescription">
+              {{ note.title | slice:0:30 }}
+              <a (click)="note.readmore=true" (keyup.space)="note.readmore=true"
+                 href="javascript:void(0)" id="bidDetailReadMoreButton">...</a>
+            </p>
+            <p *ngIf="note.readmore" id="bidDescriptionViewMore">
+              {{ note.title }}
+              <a (click)="note.readmore=false" (keyup.space)="note.readmore=false" href="javascript:void(0)"
+                 id="bidDetailReadLessButton">...</a>
+            </p>
+          </div>
+
+          <div style="float:right;" class="cursor-pointer" [matMenuTriggerFor]="menu">
+            <span><mat-icon style="display: block;">more_vert</mat-icon></span>
+          </div>
+          <mat-menu #menu="matMenu">
+            <button (click)="selectNote(note)" mat-menu-item>
+              <mat-icon>create</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button (click)="archiveNote(note)" mat-menu-item>
+              <mat-icon>archive</mat-icon>
+              <span>Archive</span>
+            </button>
+            <button (click)="deleteNote(note)" mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Delete </span>
+            </button>
+          </mat-menu>
+          <div style="clear: both"></div>
+        </div>
+        <div style="margin-bottom: 10px;">
+          <a style="float:right;" (click)="loadMoreNotes()">Load More</a>
+          <div style="clear: both"></div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </mat-drawer-container>
+
+</div>
+
+</body>
+</html>

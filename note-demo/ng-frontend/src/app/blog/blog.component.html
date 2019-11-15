@@ -1,0 +1,5 @@
+<div class="note-row" *ngFor="let note of blognotes; index as i">
+  <div class="blog-row">
+    <div [innerHTML]="note.title"></div>
+  </div>
+</div>

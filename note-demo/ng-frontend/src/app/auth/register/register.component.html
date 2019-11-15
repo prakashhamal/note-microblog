@@ -1,0 +1,49 @@
+<mat-card>
+  <div>
+    <h1>Register</h1>
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-group">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="First name" class="form-control" id="firstname"
+                 required
+                 [(ngModel)]="user.first_name" name="firstName"
+          >
+        </mat-form-field>
+
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Last name" class="form-control" id="lastname"
+                 required
+                 [(ngModel)]="user.last_name" name="firstName"
+          >
+        </mat-form-field>
+
+      </div>
+
+      <div class="form-group">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Email" class="form-control" id="email"
+                 required
+                 [(ngModel)]="user.email" name="email"
+          >
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="example-full-width">
+          <input type="password" matInput placeholder="Password" class="form-control" id="password"
+                 required
+                 [(ngModel)]="user.password" name="password"
+          >
+        </mat-form-field>
+
+      </div>
+      <div>
+        <button type="submit" mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Login</button>
+        &nbsp;
+        <button type="button" mat-raised-button (click)="registerForm.reset()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</mat-card>
